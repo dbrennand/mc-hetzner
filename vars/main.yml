@@ -1,0 +1,20 @@
+# geerlingguy.security vars
+security_ssh_allowed_users:
+  - mc-hetzner
+security_sudoers_passwordless:
+  - mc-hetzner
+security_autoupdate_blacklist:
+  - docker-ce
+
+# geerlingguy.pip vars
+pip_install_packages:
+  - name: docker
+
+# geerlingguy.docker
+docker_users:
+  - mc-hetzner
+docker_daemon_options:
+  log-driver: "json"
+  log-opts:
+    max-size: "10m"
+    max-file: "3"
