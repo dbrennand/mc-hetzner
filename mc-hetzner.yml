@@ -2,19 +2,99 @@
 - hosts: all
   vars_files:
     - vars/main.yml
+  gather_facts: false
   pre_tasks:
+    - name: Wait 600 seconds for the server to be reachable
+      ansible.builtin.wait_for_connection:
+
+    - name: Gather facts
+      ansible.builtin.setup:
+
     - name: Create the user 'mc-hetzner'
       ansible.builtin.user:
         name: mc-hetzner
         group: sudo
         comment: Minecrat Hetzner
+        state: present
 
     - name: Add 'mc_hetzner' SSH key to 'mc-hetzner'
       ansible.posix.authorized_key:
         user: mc-hetzner
         key: "{{ lookup('file', '~/.ssh/mc_hetzner.pub') }}"
         state: present
-  roles:
-    - geerlingguy.security
-    - geerlingguy.pip
-    - geerlingguy.docker
+
+    - name: Get 'mc-hetzner' PUID
+      ansible.builtin.command:
+        cmd: id -u mc-hetzner
+      register: get_puid
+      changed_when: false
+
+    - name: Register 'mc-hetzner' PUID
+      ansible.builtin.set_fact:
+        puid: "{{ get_puid.stdout }}"
+
+    - name: Get 'mc-hetzner' PGID
+      ansible.builtin.command:
+        cmd: id -g mc-hetzner
+      register: get_pgid
+      changed_when: false
+
+    - name: Register 'mc-hetzner' PGID
+      ansible.builtin.set_fact:
+        pgid: "{{ get_pgid.stdout }}"
+  tasks:
+    - name: Include geerlingguy.pip
+      ansible.builtin.include_role:
+        name: geerlingguy.pip
+
+    - name: Include geerlingguy.docker
+      ansible.builtin.include_role:
+        name: geerlingguy.docker
+
+    - name: Create Minecraft directory
+      ansible.builtin.file:
+        name: /home/mc-hetzner/minecraft
+        owner: mc-hetzner
+        state: directory
+        mode: 0755
+
+    - name: Create Minecraft Docket network
+      community.docker.docker_network:
+        name: minecraft
+        state: present
+
+    - name: Create Minecraft Docker container
+      community.docker.docker_container:
+        name: minecraft
+        image: "{{ minecraft_image }}:{{ minecraft_image_tag }}"
+        restart_policy: always
+        networks:
+          - name: minecraft
+        ports:
+          - 25565
+        volumes:
+          - /home/mc-hetzner/minecraft/:/data
+        env:
+          "{{ minecraft_options }}"
+        user: "{{ puid }}:{{ pgid }}"
+        state: started
+
+    - name: Create Minecraft backup Docker container
+      community.docker.docker_container:
+        name: minecraft-backup
+        image: "{{ minecraft_backup_image }}:{{ minecraft_backup_image_tag }}"
+        restart_policy: always
+        networks:
+          - name: minecraft
+        network_mode: container:minecraft
+        volumes:
+          - /home/mc-hetzner/minecraft/:/data:ro
+        env:
+          "{{ minecraft_backup_options }}"
+        user: "{{ puid }}:{{ pgid }}"
+        hostname: minecraft-backup
+        state: started
+
+    - name: Include geerlingguy.security
+      ansible.builtin.include_role:
+        name: geerlingguy.security
