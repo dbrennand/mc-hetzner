@@ -58,7 +58,7 @@
         state: directory
         mode: 0755
 
-    - name: Create Minecraft Docket network
+    - name: Create Minecraft Docker network
       community.docker.docker_network:
         name: minecraft
         state: present
