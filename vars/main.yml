@@ -1,11 +1,3 @@
-# geerlingguy.security vars
-security_ssh_allowed_users:
-  - mc-hetzner
-security_sudoers_passwordless:
-  - mc-hetzner
-security_autoupdate_blacklist:
-  - docker-ce
-
 # geerlingguy.pip vars
 pip_install_packages:
   - name: docker
@@ -18,3 +10,63 @@ docker_daemon_options:
   log-opts:
     max-size: "10m"
     max-file: "3"
+
+# geerlingguy.security vars
+security_ssh_allowed_users:
+  - mc-hetzner
+security_sudoers_passwordless:
+  - mc-hetzner
+security_autoupdate_blacklist:
+  - docker-ce
+
+# mc-hetzner.yml playbook vars
+minecraft_image: itzg/minecraft-server
+minecraft_image_tag: latest
+# All container environment variables can be found at: https://github.com/itzg/docker-minecraft-server#server-configuration
+minecraft_options:
+  EULA: "TRUE"
+  # https://github.com/itzg/docker-minecraft-server#versions
+  VERSION: LATEST
+  # https://github.com/itzg/docker-minecraft-server#downloadable-world
+  WORLD: http://www.example.com/worlds/MySave.zip
+  # https://github.com/itzg/docker-minecraft-server#server-configuration
+  MOTD: A Minecraft Server created using https://github.com/dbrennand/mc-hetzner
+  # https://github.com/itzg/docker-minecraft-server#difficulty
+  DIFFICULTY: normal
+  # https://github.com/itzg/docker-minecraft-server#whitelist-players
+  WHITELIST: player1,player2
+  # https://github.com/itzg/docker-minecraft-server#opadministrator-players
+  OPS: player1,player2
+  ENABLE_RCON: "true"
+  # Best to provide in quotes in case of any special characters
+  RCON_PASSWORD: "password"
+  MAX_PLAYERS: "20"
+  ALLOW_NETHER: "true"
+  ANNOUNCE_PLAYER_ACHIEVEMENTS: "true"
+  GENERATE_STRUCTURES: "true"
+  SNOOPER_ENABLED: "false"
+  SPAWN_ANIMALS: "true"
+  SPAWN_MONSTERS: "true"
+  SPAWN_NPCS: "true"
+  SPAWN_PROTECTION: "0"
+  MODE: "survival"
+  PVP: "true"
+  SERVER_NAME: "mc-hetzner"
+
+minecraft_backup_image: itzg/mc-backup
+minecraft_backup_image_tag: latest
+# All container environment variables can be found at: https://github.com/itzg/docker-mc-backup#common-variables
+minecraft_backup_options:
+  BACKUP_INTERVAL: "24h"
+  BACKUP_METHOD: restic
+  RESTIC_REPOSITORY: b2:<bucket>
+  # Password used to encrypt backups
+  RESTIC_PASSWORD: "password"
+  B2_ACCOUNT_ID: "id"
+  B2_ACCOUNT_KEY: "key"
+  # Same as minecraft_options.RCON_PASSWORD
+  RCON_PASSWORD: "password"
+  PRE_BACKUP_SCRIPT: |
+    curl -F "text=Starting backup for mc-hetzner" "https://api.telegram.org/bot<token>/sendMessage?chat_id=<chatid>"
+  POST_BACKUP_SCRIPT: |
+    curl -F "text=Finished backup for mc-hetzner" "https://api.telegram.org/bot<token>/sendMessage?chat_id=<chatid>"
