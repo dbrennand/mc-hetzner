@@ -57,7 +57,8 @@ minecraft_backup_image: itzg/mc-backup
 minecraft_backup_image_tag: latest
 # All container environment variables can be found at: https://github.com/itzg/docker-mc-backup#common-variables
 minecraft_backup_options:
-  BACKUP_INTERVAL: "24h"
+  BACKUP_INTERVAL: 24h
+  INITIAL_DELAY: 5m
   BACKUP_METHOD: restic
   RESTIC_REPOSITORY: b2:<bucket>
   # Password used to encrypt backups
