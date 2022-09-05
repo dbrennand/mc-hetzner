@@ -1,3 +1,5 @@
+# Role vars
+# These vars shouldn't be modified unless you know what you're doing
 # geerlingguy.pip vars
 pip_install_packages:
   - name: docker
