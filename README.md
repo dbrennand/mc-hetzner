@@ -87,6 +87,12 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
    terraform apply
    ```
 
+> Later down the line, you may want to modify the Minecraft server container or backup container's environment variables.
+> To re-run the creation of either without running the entire playbook, use the tags as below:
+> ```bash
+> ansible-playbook -u mc-hetzner -i "<Server IP>" --private-key ~/.ssh/mc_hetzner --tags "minecraft,backup" mc-hetzner.yml
+> ```
+
 ## Authors & Contributors
 
 * [**dbrennand**](https://github.com/dbrennand) - *Author*
