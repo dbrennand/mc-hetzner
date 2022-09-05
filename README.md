@@ -67,15 +67,21 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
     ansible-galaxy install -r requirements.yml
     ```
 
-2. Modify the Ansible playbook [vars](vars/main.yml#L24) file to configure the Minecraft server Docker container and backup container.
+2. Create the `mc_hetzner` SSH key pair:
 
-3. Initialise the [hcloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) Terraform provider:
+  ```bash
+  ssh-keygen -f ~/.ssh/mc_hetzner -t rsa -b 4096 -N ""
+  ```
+
+3. Modify the Ansible playbook [vars](vars/main.yml#L24) file to configure the Minecraft server Docker container and backup container.
+
+4. Initialise the [hcloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) Terraform provider:
 
     ```bash
     terraform init
     ```
 
-4. Deploy the server:
+5. Deploy the server:
 
    ```bash
    terraform apply
