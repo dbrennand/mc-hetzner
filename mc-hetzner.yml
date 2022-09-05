@@ -78,6 +78,8 @@
           "{{ minecraft_options }}"
         user: "{{ puid }}:{{ pgid }}"
         state: started
+      tags:
+        - minecraft
 
     - name: Create Minecraft backup Docker container
       community.docker.docker_container:
@@ -95,6 +97,8 @@
         hostname: minecraft-backup
         state: started
       when: minecraft_backup
+      tags:
+        - backup
 
     - name: Include geerlingguy.security
       ansible.builtin.include_role:
