@@ -69,9 +69,9 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
 
 2. Create the `mc_hetzner` SSH key pair:
 
-  ```bash
-  ssh-keygen -f ~/.ssh/mc_hetzner -t rsa -b 4096 -N ""
-  ```
+   ```bash
+   ssh-keygen -f ~/.ssh/mc_hetzner -t rsa -b 4096 -N ""
+   ```
 
 3. Modify the Ansible playbook [vars](vars/main.yml#L24) file to configure the Minecraft server Docker container and backup container.
 
