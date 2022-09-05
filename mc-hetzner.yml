@@ -66,7 +66,7 @@
     - name: Create Minecraft Docker container
       community.docker.docker_container:
         name: minecraft
-        image: "{{ minecraft_image }}:{{ minecraft_image_tag }}"
+        image: "itzg/minecraft-server:{{ minecraft_image_tag }}"
         restart_policy: always
         networks:
           - name: minecraft
@@ -82,7 +82,7 @@
     - name: Create Minecraft backup Docker container
       community.docker.docker_container:
         name: minecraft-backup
-        image: "{{ minecraft_backup_image }}:{{ minecraft_backup_image_tag }}"
+        image: "itzg/mc-backup:{{ minecraft_backup_image_tag }}"
         restart_policy: always
         networks:
           - name: minecraft
