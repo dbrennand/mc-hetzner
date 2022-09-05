@@ -67,7 +67,7 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
     ansible-galaxy install -r requirements.yml
     ```
 
-2. Modify the Ansible playbook [vars](vars/main.yml#L22) file to configure the Minecraft server Docker container and backup container.
+2. Modify the Ansible playbook [vars](vars/main.yml#L24) file to configure the Minecraft server Docker container and backup container.
 
 3. Initialise the [hcloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) Terraform provider:
 
