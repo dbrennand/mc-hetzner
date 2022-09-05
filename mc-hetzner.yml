@@ -14,7 +14,7 @@
       ansible.builtin.user:
         name: mc-hetzner
         group: sudo
-        comment: Minecrat Hetzner
+        comment: Minecraft Hetzner
         state: present
 
     - name: Add 'mc_hetzner' SSH key to 'mc-hetzner'
