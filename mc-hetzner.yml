@@ -94,6 +94,7 @@
         user: "{{ puid }}:{{ pgid }}"
         hostname: minecraft-backup
         state: started
+      when: minecraft_backup
 
     - name: Include geerlingguy.security
       ansible.builtin.include_role:
