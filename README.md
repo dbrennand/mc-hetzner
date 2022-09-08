@@ -96,7 +96,7 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
 5. Deploy the server:
 
    ```bash
-   terraform apply
+   terraform apply -var="hcloud_token=<API Token>"
    ```
 
 > Later down the line, you may want to modify the Minecraft server container or backup container's environment variables.
