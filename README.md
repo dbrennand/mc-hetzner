@@ -1,5 +1,7 @@
 # mc-hetzner
 
+![Ansible-Lint](https://github.com/dbrennand/mc-hetzner/actions/workflows/ansible-lint.yml/badge.svg)
+
 Deploy a Minecraft [PaperMC](https://papermc.io/) server on [Hetzner](https://www.hetzner.com/cloud) using [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/).
 
 The Minecraft server is deployed as a [container](https://github.com/itzg/docker-minecraft-server) and using [GeyserMC](https://geysermc.org/) and [Floodgate](https://github.com/GeyserMC/Floodgate/), Minecraft Bedrock Edition players can also play on the Java edition server.
