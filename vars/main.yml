@@ -23,9 +23,14 @@ security_autoupdate_blacklist:
 
 # mc-hetzner.yml playbook vars
 minecraft_image_tag: latest
+minecraft_geysermc_download_url: https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar # noqa yaml[line-length]
+minecraft_floodgate_download_url: https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/lastSuccessfulBuild/artifact/spigot/build/libs/floodgate-spigot.jar # noqa yaml[line-length]
 # All container environment variables can be found at: https://github.com/itzg/docker-minecraft-server#server-configuration
 minecraft_options:
+  # DO NOT modify EULA or TYPE
   EULA: "TRUE"
+  TYPE: PAPER
+  # Modify the below variables
   # https://github.com/itzg/docker-minecraft-server#versions
   VERSION: LATEST
   # https://github.com/itzg/docker-minecraft-server#downloadable-world
