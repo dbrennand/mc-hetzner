@@ -30,10 +30,23 @@ resource "hcloud_firewall" "default" {
     source_ips = ["${chomp(data.http.public_ip.body)}/32"]
   }
 
+  # Minecraft Java edition port rule
   rule {
     direction = "in"
     protocol  = "tcp"
     port      = "25565"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
+
+  # Minecraft Bedrock edition port rule
+  # Use GeyserMC to allow Bedrock players to play on a Java edition server
+  rule {
+    direction = "in"
+    protocol  = "udp"
+    port      = "19132"
     source_ips = [
       "0.0.0.0/0",
       "::/0"
