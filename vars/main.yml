@@ -55,9 +55,9 @@ minecraft_options:
   SPAWN_MONSTERS: "true"
   SPAWN_NPCS: "true"
   SPAWN_PROTECTION: "0"
-  MODE: "survival"
+  MODE: survival
   PVP: "true"
-  SERVER_NAME: "mc-hetzner"
+  SERVER_NAME: mc-hetzner
 
 minecraft_backup: true
 minecraft_backup_image_tag: latest
