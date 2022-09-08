@@ -1,6 +1,8 @@
 # mc-hetzner
 
-Deploy a Minecraft server on [Hetzner](https://www.hetzner.com/cloud) using [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/).
+Deploy a Minecraft [PaperMC](https://papermc.io/) server on [Hetzner](https://www.hetzner.com/cloud) using [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/).
+
+The Minecraft server is deployed as a [container](https://github.com/itzg/docker-minecraft-server) and using [GeyserMC](https://geysermc.org/) and [Floodgate](https://github.com/GeyserMC/Floodgate/), Minecraft Bedrock Edition players can also play on the Java edition server.
 
 ## Prerequisites
 
@@ -21,9 +23,17 @@ minecraft_image_tag: latest
 The [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server) container image tag to use. See [itzg/minecraft-server/tags](https://hub.docker.com/r/itzg/minecraft-server/tags) for more available tags.
 
 ```yaml
+minecraft_geysermc_download_url: https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar
+minecraft_floodgate_download_url: https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/lastSuccessfulBuild/artifact/spigot/build/libs/floodgate-spigot.jar
+```
+
+The download URLs for the [GeyserMC](https://geysermc.org/) and [Floodgate](https://github.com/GeyserMC/Floodgate/) plugins. These plugins allow Minecraft Bedrock Edition players to play on a Java edition server.
+
+```yaml
 # All container environment variables can be found at: https://github.com/itzg/docker-minecraft-server#server-configuration
 minecraft_options:
-  EULA: "TRUE"
+  # ...
+  # Modify the below variables
   # https://github.com/itzg/docker-minecraft-server#versions
   VERSION: LATEST
   # https://github.com/itzg/docker-minecraft-server#downloadable-world
