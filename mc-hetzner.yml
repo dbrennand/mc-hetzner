@@ -119,7 +119,7 @@
           - name: minecraft
         ports:
           - "25565:25565"
-          - "19132:19132"
+          - "19132:19132/udp"
         volumes:
           - /home/mc-hetzner/minecraft/:/data
         env:
