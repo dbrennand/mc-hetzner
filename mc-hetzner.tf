@@ -103,6 +103,6 @@ resource "hcloud_server" "mc-hetzner" {
     "type" : "Minecraft"
   }
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '${self.ipv4_address}' --private-key ~/.ssh/mc_hetzner mc-hetzner.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i ${self.ipv4_address}, --private-key ~/.ssh/mc_hetzner mc-hetzner.yml"
   }
 }
