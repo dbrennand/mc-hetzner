@@ -60,7 +60,7 @@ resource "hcloud_firewall" "default" {
     direction = "in"
     protocol  = "tcp"
     port      = "22"
-    source_ips = ["${chomp(data.http.public_ip.body)}/32"]
+    source_ips = ["${chomp(data.http.public_ip.response_body)}/32"]
   }
 
   # Minecraft Java edition port rule
