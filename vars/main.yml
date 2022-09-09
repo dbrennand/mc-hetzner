@@ -8,7 +8,7 @@ pip_install_packages:
 docker_users:
   - mc-hetzner
 docker_daemon_options:
-  log-driver: "json"
+  log-driver: "json-file"
   log-opts:
     max-size: "10m"
     max-file: "3"
