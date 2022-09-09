@@ -27,10 +27,15 @@ minecraft_geysermc_download_url: https://ci.opencollab.dev/job/GeyserMC/job/Geys
 minecraft_floodgate_download_url: https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/lastSuccessfulBuild/artifact/spigot/build/libs/floodgate-spigot.jar # noqa yaml[line-length]
 # All container environment variables can be found at: https://github.com/itzg/docker-minecraft-server#server-configuration
 minecraft_options:
-  # DO NOT modify EULA or TYPE
+  # DO NOT modify these variables
   EULA: "TRUE"
   TYPE: PAPER
+  # Required for Minecraft Bedrock Edition players to join with GeyserMC
+  # See: https://github.com/GeyserMC/Geyser/issues/3187
+  ENFORCE_SECURE_PROFILE: "false"
   # Modify the below variables
+  # https://github.com/itzg/docker-minecraft-server#memory-limit
+  MEMORY: 2500M
   # https://github.com/itzg/docker-minecraft-server#versions
   VERSION: LATEST
   # https://github.com/itzg/docker-minecraft-server#downloadable-world
