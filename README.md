@@ -36,6 +36,8 @@ The download URLs for the [GeyserMC](https://geysermc.org/) and [Floodgate](http
 minecraft_options:
   # ...
   # Modify the below variables
+  # https://github.com/itzg/docker-minecraft-server#memory-limit
+  MEMORY: 2500M
   # https://github.com/itzg/docker-minecraft-server#versions
   VERSION: LATEST
   # https://github.com/itzg/docker-minecraft-server#downloadable-world
@@ -99,11 +101,15 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
    terraform apply -var="hcloud_token=<API Token>"
    ```
 
-> Later down the line, you may want to modify the Minecraft server container or backup container's environment variables.
-> To re-run the creation of either without running the entire playbook, use the tags as below:
-> ```bash
-> ansible-playbook -u mc-hetzner -i "<Server IP>" --private-key ~/.ssh/mc_hetzner --tags "minecraft,backup" mc-hetzner.yml
-> ```
+## Reconfiguring the Minecraft or Backup container
+
+Later down the line, you may want to modify the Minecraft server container or backup container's environment variables.
+
+To re-run the creation of either without running the entire playbook, use the tags as below:
+
+```bash
+ansible-playbook -u mc-hetzner -i "<Server IP>", --private-key ~/.ssh/mc_hetzner --tags "minecraft,backup" mc-hetzner.yml
+```
 
 ## Authors & Contributors
 
