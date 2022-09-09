@@ -6,6 +6,8 @@ Deploy a Minecraft [PaperMC](https://papermc.io/) server on [Hetzner](https://ww
 
 The Minecraft server is deployed as a [container](https://github.com/itzg/docker-minecraft-server) and using [GeyserMC](https://geysermc.org/) and [Floodgate](https://github.com/GeyserMC/Floodgate/), Minecraft Bedrock Edition players can also play on the Java edition server.
 
+The default server deployed is [`cx21`](mc-hetzner.tf#L31). See [Hetzner Cloud](https://www.hetzner.com/cloud) for the full list of available server types.
+
 ## Prerequisites
 
 * [Terraform](https://www.terraform.io/downloads)
@@ -98,7 +100,10 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
 5. Deploy the server:
 
    ```bash
+   # Using defaults
    terraform apply -var="hcloud_token=<API Token>"
+   # Example: Overriding the default server_type
+   terraform apply -var="hcloud_token=<API Token>" -var="server_type=cx31"
    ```
 
 ## Reconfiguring the Minecraft or Backup container
