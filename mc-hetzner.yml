@@ -28,20 +28,32 @@
         cmd: id -u mc-hetzner
       register: get_puid
       changed_when: false
+      tags:
+        - minecraft
 
     - name: Register 'mc-hetzner' PUID
       ansible.builtin.set_fact:
         puid: "{{ get_puid.stdout }}"
+      tags:
+        - minecraft
 
     - name: Get 'mc-hetzner' PGID
       ansible.builtin.command:
         cmd: id -g mc-hetzner
       register: get_pgid
       changed_when: false
+      tags:
+        - minecraft
 
     - name: Register 'mc-hetzner' PGID
       ansible.builtin.set_fact:
         pgid: "{{ get_pgid.stdout }}"
+      tags:
+        - minecraft
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
   tasks:
     - name: Include geerlingguy.pip
       ansible.builtin.include_role:
@@ -105,8 +117,8 @@
         networks:
           - name: minecraft
         ports:
-          - 25565
-          - 19132
+          - "25565:25565"
+          - "19132:19132"
         volumes:
           - /home/mc-hetzner/minecraft/:/data
         env:
