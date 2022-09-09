@@ -106,6 +106,8 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
    terraform apply -var="hcloud_token=<API Token>" -var="server_type=cx31"
    ```
 
+6. Enjoy ✨
+
 ## Reconfiguring the Minecraft or Backup container
 
 Later down the line, you may want to modify the Minecraft server container or backup container's environment variables.
@@ -114,6 +116,12 @@ To re-run the creation of either without running the entire playbook, use the ta
 
 ```bash
 ansible-playbook -u mc-hetzner -i "<Server IP>", --private-key ~/.ssh/mc_hetzner --tags "minecraft,backup" mc-hetzner.yml
+```
+
+## Whitelisting a Minecraft Bedrock Edition player using Floodgate
+
+```bash
+ansible all -u mc-hetzner -i "<Server IP>", --private-key ~/.ssh/mc_hetzner -m ansible.builtin.command -a "docker exec minecraft rcon-cli fwhitelist add <Bedrock player name>"
 ```
 
 ## Authors & Contributors
