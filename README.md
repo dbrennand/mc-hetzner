@@ -130,7 +130,11 @@ ansible all -u mc-hetzner -i "<Server IP>", --private-key ~/.ssh/mc_hetzner -m a
 
 ## How do Minecraft Bedrock Edition players on console connect to the server?
 
-For Minecraft Bedrock Edition players on console to connect to the server, they must use a CLI application such as [jhead/phantom](https://github.com/jhead/phantom).
+There are several options for Minecraft Bedrock Edition players on console to connect to the server:
+
+1. Use a CLI application such as [jhead/phantom](https://github.com/jhead/phantom).
+
+2. Use a mobile application such as [MC Server Connector](https://play.google.com/store/apps/details?id=com.smokiem.mcserverconnector&hl=en_GB&gl=US) or [BedrockTogether](https://apps.apple.com/us/app/bedrocktogether/id1534593376)
 
 ## Authors & Contributors
 
