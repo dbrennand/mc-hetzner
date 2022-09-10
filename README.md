@@ -91,19 +91,13 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
 
 3. Modify the Ansible playbook [vars](vars/main.yml#L24) file to configure the Minecraft server Docker container and backup container.
 
-4. Encrypt the Ansible playbook [vars](vars/main.yml#L24) file:
-
-  ```bash
-  ansible-vault encrypt vars/main.yml
-  ```
-
-5. Initialise the [hcloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) Terraform provider:
+4. Initialise the [hcloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) Terraform provider:
 
     ```bash
     terraform init
     ```
 
-6. Deploy the server:
+5. Deploy the server:
 
    ```bash
    # Using defaults
@@ -112,7 +106,7 @@ The environment variables passed to the [itzg/mc-backup](https://github.com/itzg
    terraform apply -var="hcloud_token=<API Token>" -var="server_type=cx31"
    ```
 
-7. Enjoy ✨
+6. Enjoy ✨
 
 ## Reconfiguring the Minecraft or Backup container
 
