@@ -133,6 +133,16 @@
       tags:
         - minecraft
 
+    - name: Create Minecraft backup directory
+      ansible.builtin.file:
+        name: /home/mc-hetzner/minecraft-backup/
+        owner: mc-hetzner
+        state: directory
+        mode: 0755
+      when: minecraft_backup
+      tags:
+        - backup
+
     - name: Create Minecraft backup Docker container
       community.docker.docker_container:
         name: minecraft-backup
@@ -140,12 +150,11 @@
         restart_policy: always
         networks:
           - name: minecraft
-        network_mode: container:minecraft
         volumes:
           - /home/mc-hetzner/minecraft/:/data:ro
+          - /home/mc-hetzner/minecraft-backup/:/backups
         env:
           "{{ minecraft_backup_options }}"
-        user: "{{ puid }}:{{ pgid }}"
         hostname: minecraft-backup
         state: started
       when: minecraft_backup
