@@ -24,34 +24,27 @@
         key: "{{ lookup('file', '~/.ssh/mc_hetzner.pub') }}"
         state: present
 
-    - name: Get 'mc-hetzner' PUID
-      ansible.builtin.command:
-        cmd: id -u mc-hetzner
-      register: get_puid
-      changed_when: false
-      tags:
-        - minecraft
-        - backup
+    - name: Get 'mc-hetzner' PUID and PGID
+      block:
+        - name: Get 'mc-hetzner' PUID
+          ansible.builtin.command:
+            cmd: id -u mc-hetzner
+          register: get_puid
+          changed_when: false
 
-    - name: Register 'mc-hetzner' PUID
-      ansible.builtin.set_fact:
-        puid: "{{ get_puid.stdout }}"
-      tags:
-        - minecraft
-        - backup
+        - name: Register 'mc-hetzner' PUID
+          ansible.builtin.set_fact:
+            puid: "{{ get_puid.stdout }}"
 
-    - name: Get 'mc-hetzner' PGID
-      ansible.builtin.command:
-        cmd: id -g mc-hetzner
-      register: get_pgid
-      changed_when: false
-      tags:
-        - minecraft
-        - backup
+        - name: Get 'mc-hetzner' PGID
+          ansible.builtin.command:
+            cmd: id -g mc-hetzner
+          register: get_pgid
+          changed_when: false
 
-    - name: Register 'mc-hetzner' PGID
-      ansible.builtin.set_fact:
-        pgid: "{{ get_pgid.stdout }}"
+        - name: Register 'mc-hetzner' PGID
+          ansible.builtin.set_fact:
+            pgid: "{{ get_pgid.stdout }}"
       tags:
         - minecraft
         - backup
