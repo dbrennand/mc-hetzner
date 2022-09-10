@@ -52,7 +52,7 @@ minecraft_options:
 The environment variables passed to the [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server) container. These environment variables configure the Minecraft server.
 
 ```yaml
-minecraft_backup: true
+minecraft_backup: false
 ```
 
 Whether or not to deploy the [itzg/mc-backup](https://github.com/itzg/docker-mc-backup) container image to backup the Minecraft server world.
@@ -66,6 +66,8 @@ The [itzg/mc-backup](https://github.com/itzg/docker-mc-backup) container image t
 ```yaml
 # All container environment variables can be found at: https://github.com/itzg/docker-mc-backup#common-variables
 minecraft_backup_options:
+  # ...
+  # Modify the below variables
   BACKUP_INTERVAL: 24h
   INITIAL_DELAY: 5m
   BACKUP_METHOD: restic
