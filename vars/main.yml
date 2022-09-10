@@ -1,0 +1,87 @@
+# Role vars
+# These vars shouldn't be modified unless you know what you're doing
+# geerlingguy.pip vars
+pip_install_packages:
+  - name: docker
+
+# geerlingguy.docker vars
+docker_users:
+  - mc-hetzner
+docker_daemon_options:
+  log-driver: "json-file"
+  log-opts:
+    max-size: "10m"
+    max-file: "3"
+
+# geerlingguy.security vars
+security_ssh_allowed_users:
+  - mc-hetzner
+security_sudoers_passwordless:
+  - mc-hetzner
+security_autoupdate_blacklist:
+  - docker-ce
+
+# mc-hetzner.yml playbook vars
+minecraft_image_tag: latest
+minecraft_geysermc_download_url: https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/artifact/bootstrap/spigot/target/Geyser-Spigot.jar # noqa yaml[line-length]
+minecraft_floodgate_download_url: https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/lastSuccessfulBuild/artifact/spigot/build/libs/floodgate-spigot.jar # noqa yaml[line-length]
+# All container environment variables can be found at: https://github.com/itzg/docker-minecraft-server#server-configuration
+minecraft_options:
+  # DO NOT modify these variables
+  EULA: "TRUE"
+  TYPE: PAPER
+  # Required for Minecraft Bedrock Edition players to join with GeyserMC
+  # See: https://github.com/GeyserMC/Geyser/issues/3187
+  ENFORCE_SECURE_PROFILE: "false"
+  # Modify the below variables
+  # https://github.com/itzg/docker-minecraft-server#memory-limit
+  MEMORY: 2500M
+  # https://github.com/itzg/docker-minecraft-server#versions
+  VERSION: LATEST
+  # https://github.com/itzg/docker-minecraft-server#downloadable-world
+  WORLD: http://www.example.com/worlds/MySave.zip
+  # https://github.com/itzg/docker-minecraft-server#server-configuration
+  MOTD: A Minecraft Server created using https://github.com/dbrennand/mc-hetzner
+  # https://github.com/itzg/docker-minecraft-server#difficulty
+  DIFFICULTY: normal
+  # https://github.com/itzg/docker-minecraft-server#whitelist-players
+  WHITELIST: player1,player2
+  # https://github.com/itzg/docker-minecraft-server#opadministrator-players
+  OPS: player1,player2
+  ENABLE_RCON: "true"
+  # Best to provide in quotes in case of any special characters
+  RCON_PASSWORD: "password"
+  MAX_PLAYERS: "20"
+  ALLOW_NETHER: "true"
+  ANNOUNCE_PLAYER_ACHIEVEMENTS: "true"
+  GENERATE_STRUCTURES: "true"
+  SNOOPER_ENABLED: "false"
+  SPAWN_ANIMALS: "true"
+  SPAWN_MONSTERS: "true"
+  SPAWN_NPCS: "true"
+  SPAWN_PROTECTION: "0"
+  MODE: survival
+  PVP: "true"
+  SERVER_NAME: mc-hetzner
+
+minecraft_backup: false
+minecraft_backup_image_tag: latest
+# All container environment variables can be found at: https://github.com/itzg/docker-mc-backup#common-variables
+minecraft_backup_options:
+  # DO NOT modify this variable
+  RCON_HOST: minecraft
+  # Modify the below variables
+  BACKUP_INTERVAL: 24h
+  INITIAL_DELAY: 5m
+  BACKUP_METHOD: restic
+  RESTIC_REPOSITORY: b2:<bucket>
+  # Password used to encrypt backups
+  RESTIC_PASSWORD: "password"
+  B2_ACCOUNT_ID: "id"
+  B2_ACCOUNT_KEY: "key"
+  # Same as minecraft_options.RCON_PASSWORD
+  RCON_PASSWORD: "password"
+  PRE_BACKUP_SCRIPT: |
+    echo "Starting world backup for mc-hetzner"
+  POST_BACKUP_SCRIPT: |
+    echo "Finished world backup for mc-hetzner"

@@ -1,0 +1,159 @@
+---
+- hosts: all
+  vars_files:
+    - vars/main.yml
+  gather_facts: false
+  pre_tasks:
+    - name: Wait 600 seconds for the server to be reachable
+      ansible.builtin.wait_for_connection:
+
+    - name: Gather facts
+      ansible.builtin.setup:
+
+    - name: Create the user 'mc-hetzner'
+      ansible.builtin.user:
+        name: mc-hetzner
+        group: sudo
+        comment: Minecraft Hetzner
+        shell: /bin/bash
+        state: present
+
+    - name: Add 'mc_hetzner' SSH key to 'mc-hetzner'
+      ansible.posix.authorized_key:
+        user: mc-hetzner
+        key: "{{ lookup('file', '~/.ssh/mc_hetzner.pub') }}"
+        state: present
+
+    - name: Get 'mc-hetzner' PUID and PGID
+      block:
+        - name: Get 'mc-hetzner' PUID
+          ansible.builtin.command:
+            cmd: id -u mc-hetzner
+          register: get_puid
+          changed_when: false
+
+        - name: Register 'mc-hetzner' PUID
+          ansible.builtin.set_fact:
+            puid: "{{ get_puid.stdout }}"
+
+        - name: Get 'mc-hetzner' PGID
+          ansible.builtin.command:
+            cmd: id -g mc-hetzner
+          register: get_pgid
+          changed_when: false
+
+        - name: Register 'mc-hetzner' PGID
+          ansible.builtin.set_fact:
+            pgid: "{{ get_pgid.stdout }}"
+      tags:
+        - minecraft
+        - backup
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+  tasks:
+    - name: Include geerlingguy.pip
+      ansible.builtin.include_role:
+        name: geerlingguy.pip
+
+    - name: Include geerlingguy.docker
+      ansible.builtin.include_role:
+        name: geerlingguy.docker
+
+    - name: Create Minecraft directory
+      ansible.builtin.file:
+        name: /home/mc-hetzner/minecraft/
+        owner: mc-hetzner
+        state: directory
+        mode: 0755
+
+    - name: Create Minecraft plugins directory
+      ansible.builtin.file:
+        name: /home/mc-hetzner/minecraft/plugins/
+        owner: mc-hetzner
+        state: directory
+        mode: 0755
+
+    - name: Create GeyserMC plugins config directory
+      ansible.builtin.file:
+        name: /home/mc-hetzner/minecraft/plugins/Geyser-Spigot/
+        owner: mc-hetzner
+        state: directory
+        mode: 0755
+
+    - name: Copy GeyserMC plugin config
+      ansible.builtin.copy:
+        src: config.yml
+        dest: /home/mc-hetzner/minecraft/plugins/Geyser-Spigot/
+        mode: 0755
+
+    - name: Download GeyserMC plugin JAR file
+      ansible.builtin.get_url:
+        url: "{{ minecraft_geysermc_download_url }}"
+        dest: /home/mc-hetzner/minecraft/plugins/
+        owner: mc-hetzner
+        mode: 0755
+
+    - name: Download Floodgate plugin JAR file
+      ansible.builtin.get_url:
+        url: "{{ minecraft_floodgate_download_url }}"
+        dest: /home/mc-hetzner/minecraft/plugins/
+        owner: mc-hetzner
+        mode: 0755
+
+    - name: Create Minecraft Docker network
+      community.docker.docker_network:
+        name: minecraft
+        state: present
+
+    - name: Create Minecraft Docker container
+      community.docker.docker_container:
+        name: minecraft
+        image: "itzg/minecraft-server:{{ minecraft_image_tag }}"
+        restart_policy: always
+        networks:
+          - name: minecraft
+        ports:
+          - "25565:25565"
+          - "19132:19132/udp"
+        volumes:
+          - /home/mc-hetzner/minecraft/:/data
+        env:
+          "{{ minecraft_options }}"
+        user: "{{ puid }}:{{ pgid }}"
+        state: started
+      tags:
+        - minecraft
+
+    - name: Create Minecraft backup directory
+      ansible.builtin.file:
+        name: /home/mc-hetzner/minecraft-backup/
+        owner: mc-hetzner
+        state: directory
+        mode: 0755
+      when: minecraft_backup
+      tags:
+        - backup
+
+    - name: Create Minecraft backup Docker container
+      community.docker.docker_container:
+        name: minecraft-backup
+        image: "itzg/mc-backup:{{ minecraft_backup_image_tag }}"
+        restart_policy: always
+        networks:
+          - name: minecraft
+        volumes:
+          - /home/mc-hetzner/minecraft/:/data:ro
+          - /home/mc-hetzner/minecraft-backup/:/backups
+        env:
+          "{{ minecraft_backup_options }}"
+        hostname: minecraft-backup
+        state: started
+      when: minecraft_backup
+      tags:
+        - backup
+
+    - name: Include geerlingguy.security
+      ansible.builtin.include_role:
+        name: geerlingguy.security
