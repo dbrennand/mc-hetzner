@@ -68,6 +68,9 @@ minecraft_backup: true
 minecraft_backup_image_tag: latest
 # All container environment variables can be found at: https://github.com/itzg/docker-mc-backup#common-variables
 minecraft_backup_options:
+  # DO NOT modify this variable
+  RCON_HOST: minecraft
+  # Modify the below variables
   BACKUP_INTERVAL: 24h
   INITIAL_DELAY: 5m
   BACKUP_METHOD: restic
@@ -79,6 +82,6 @@ minecraft_backup_options:
   # Same as minecraft_options.RCON_PASSWORD
   RCON_PASSWORD: "password"
   PRE_BACKUP_SCRIPT: |
-    curl -F "text=Starting backup for mc-hetzner" "https://api.telegram.org/bot<token>/sendMessage?chat_id=<chatid>"
+    echo "Starting world backup for mc-hetzner"
   POST_BACKUP_SCRIPT: |
-    curl -F "text=Finished backup for mc-hetzner" "https://api.telegram.org/bot<token>/sendMessage?chat_id=<chatid>"
+    echo "Finished world backup for mc-hetzner"
