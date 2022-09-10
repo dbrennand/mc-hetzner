@@ -4,7 +4,7 @@
 pip_install_packages:
   - name: docker
 
-# geerlingguy.docker
+# geerlingguy.docker vars
 docker_users:
   - mc-hetzner
 docker_daemon_options:
