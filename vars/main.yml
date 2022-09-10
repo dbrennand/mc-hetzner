@@ -64,7 +64,7 @@ minecraft_options:
   PVP: "true"
   SERVER_NAME: mc-hetzner
 
-minecraft_backup: true
+minecraft_backup: false
 minecraft_backup_image_tag: latest
 # All container environment variables can be found at: https://github.com/itzg/docker-mc-backup#common-variables
 minecraft_backup_options:
