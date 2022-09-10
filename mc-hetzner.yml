@@ -31,12 +31,14 @@
       changed_when: false
       tags:
         - minecraft
+        - backup
 
     - name: Register 'mc-hetzner' PUID
       ansible.builtin.set_fact:
         puid: "{{ get_puid.stdout }}"
       tags:
         - minecraft
+        - backup
 
     - name: Get 'mc-hetzner' PGID
       ansible.builtin.command:
@@ -45,12 +47,14 @@
       changed_when: false
       tags:
         - minecraft
+        - backup
 
     - name: Register 'mc-hetzner' PGID
       ansible.builtin.set_fact:
         pgid: "{{ get_pgid.stdout }}"
       tags:
         - minecraft
+        - backup
 
     - name: Update apt cache
       ansible.builtin.apt:
