@@ -122,7 +122,7 @@
         env:
           "{{ minecraft_options }}"
         user: "{{ puid }}:{{ pgid }}"
-        state: started
+        state: present
       tags:
         - minecraft
 
