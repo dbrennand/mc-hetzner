@@ -107,49 +107,60 @@
         name: minecraft
         state: present
 
-    - name: Create Minecraft Docker container
-      community.docker.docker_container:
-        name: minecraft
-        image: "itzg/minecraft-server:{{ minecraft_image_tag }}"
-        restart_policy: always
-        networks:
-          - name: minecraft
-        ports:
-          - "25565:25565"
-          - "19132:19132/udp"
-        volumes:
-          - /home/mc-hetzner/minecraft/:/data
-        env:
-          "{{ minecraft_options }}"
-        user: "{{ puid }}:{{ pgid }}"
-        state: present
+    - name: Minecraft Docker container tasks
+      block:
+        - name: Create Minecraft Docker container
+          community.docker.docker_container:
+            name: minecraft
+            image: "itzg/minecraft-server:{{ minecraft_image_tag }}"
+            restart_policy: always
+            networks:
+              - name: minecraft
+            ports:
+              - "25565:25565"
+              - "19132:19132/udp"
+            volumes:
+              - /home/mc-hetzner/minecraft/:/data
+            env:
+              "{{ minecraft_options }}"
+            user: "{{ puid }}:{{ pgid }}"
+            state: present
+
+        - name: Start Minecraft Docker container
+          community.docker.docker_container:
+            name: minecraft
+            state: started
       tags:
         - minecraft
 
-    - name: Create Minecraft backup directory
-      ansible.builtin.file:
-        name: /home/mc-hetzner/minecraft-backup/
-        owner: mc-hetzner
-        state: directory
-        mode: 0755
-      when: minecraft_backup
-      tags:
-        - backup
+    - name: Minecraft backup Docker container tasks
+      block:
+        - name: Create Minecraft backup directory
+          ansible.builtin.file:
+            name: /home/mc-hetzner/minecraft-backup/
+            owner: mc-hetzner
+            state: directory
+            mode: 0755
 
-    - name: Create Minecraft backup Docker container
-      community.docker.docker_container:
-        name: minecraft-backup
-        image: "itzg/mc-backup:{{ minecraft_backup_image_tag }}"
-        restart_policy: always
-        networks:
-          - name: minecraft
-        volumes:
-          - /home/mc-hetzner/minecraft/:/data:ro
-          - /home/mc-hetzner/minecraft-backup/:/backups
-        env:
-          "{{ minecraft_backup_options }}"
-        hostname: minecraft-backup
-        state: started
+        - name: Create Minecraft backup Docker container
+          community.docker.docker_container:
+            name: minecraft-backup
+            image: "itzg/mc-backup:{{ minecraft_backup_image_tag }}"
+            restart_policy: always
+            networks:
+              - name: minecraft
+            volumes:
+              - /home/mc-hetzner/minecraft/:/data:ro
+              - /home/mc-hetzner/minecraft-backup/:/backups
+            env:
+              "{{ minecraft_backup_options }}"
+            hostname: minecraft-backup
+            state: present
+
+        - name: Start Minecraft backup Docker container
+          community.docker.docker_container:
+            name: minecraft-backup
+            state: started
       when: minecraft_backup
       tags:
         - backup
